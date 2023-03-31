@@ -15,6 +15,9 @@ python -m flask run
 /------------------
 (configure data)
 
+>git notes
+git add .
+git push -u origin main
 
 /-------------------
 

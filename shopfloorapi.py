@@ -4,21 +4,21 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import data_connect
 import requests
-app = Flask(__name__)
-app.app_context().push()
+appllication = Flask(__name__)
+appllication.app_context().push()
 if(__name__=="__main__"):
-    app.run()
+    appllication.run()
 #------------------------
 connectionString = data_connect.GetConnectionString()
 conn = pyodbc.connect(connectionString)
 #------------------------
 sqlstring = 'SELECT * FROM [PLCData].[dbo].[PLC_Master]'
 cursor = conn.cursor()
-@app.route('/')
+@appllication.route('/')
 def index():
     rootString = data_connect.GetRootString()
     return rootString
-@app.route('/plcinfo/', methods=['GET'])
+@appllication.route('/plcinfo/', methods=['GET'])
 def get_plcinfo():
     sqlstring = 'SELECT * FROM [PLCData].[dbo].[PLC_Master]'
     plcinfo = []
@@ -31,7 +31,7 @@ def get_plcinfo():
     output += json.dumps(plcinfo)
     output += "}"
     return output
-@app.route('/plcinfo/<plcid>', methods=['GET'])
+@appllication.route('/plcinfo/<plcid>', methods=['GET'])
 def get_plcid(plcid):
     sqlstring = 'SELECT * FROM [PLCData].[dbo].[PLC_Master] Where [id] = ' + plcid
     plcinfo = []
@@ -49,3 +49,4 @@ def get_plcid(plcid):
         return output
     else:
         output = "There was no information found for ID " + plcid
+        return output
