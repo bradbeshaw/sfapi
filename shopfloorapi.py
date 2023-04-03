@@ -4,34 +4,35 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import data_connect
 import requests
-appllication = Flask(__name__)
-appllication.app_context().push()
+application = Flask(__name__)
+application.app_context().push()
 if(__name__=="__main__"):
-    appllication.run()
+    application.run()
 #------------------------
 connectionString = data_connect.GetConnectionString()
 conn = pyodbc.connect(connectionString)
 #------------------------
 sqlstring = 'SELECT * FROM [PLCData].[dbo].[PLC_Master]'
 cursor = conn.cursor()
-@appllication.route('/')
+@application.route('/')
 def index():
     rootString = data_connect.GetRootString()
     return rootString
-@appllication.route('/plcinfo/', methods=['GET'])
+@application.route('/plcinfo/', methods=['GET'])
 def get_plcinfo():
     sqlstring = 'SELECT * FROM [PLCData].[dbo].[PLC_Master]'
     plcinfo = []
     output = '{"PLC_Master":'
     cursor.execute(sqlstring)
+    #create json return of plcinfo for each row in cursor
     for row in cursor:
         plcstring = 'Id: ' + str(row.id) + ', PLC_Address: ' + row.PLC_Address + ', PLC_Name: ' + row.PLC_Name
         plcinfo.append(plcstring)
-    
+        
     output += json.dumps(plcinfo)
     output += "}"
     return output
-@appllication.route('/plcinfo/<plcid>', methods=['GET'])
+@application.route('/plcinfo/<plcid>', methods=['GET'])
 def get_plcid(plcid):
     sqlstring = 'SELECT * FROM [PLCData].[dbo].[PLC_Master] Where [id] = ' + plcid
     plcinfo = []
